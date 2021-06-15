@@ -20,7 +20,7 @@ intents.members = True
 Member = discord.member
 
 
-token = 'ODUyNDgxNDY1MTQ5MjkyNTg0.YMHdOw.seB1AB7lYiVVdLR_yJmNbX9OdCM'
+token = 'Enter token'
 
 
 bot = commands.Bot(command_prefix='*', description="Description")
