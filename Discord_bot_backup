@@ -1,0 +1,83 @@
+import discord
+import json
+import requests
+import os
+import typing
+from discord import client
+from discord.ext import commands
+from discord import Intents
+from discord.errors import Forbidden
+from discord import member
+from discord.ext.commands import has_permissions, MissingPermissions
+
+from urllib import parse, request
+import re
+
+from discord.ext.commands.help import HelpCommand
+
+intents = discord.Intents.default()
+intents.members = True
+Member = discord.member
+
+
+token = 'ODUyNDgxNDY1MTQ5MjkyNTg0.YMHdOw.seB1AB7lYiVVdLR_yJmNbX9OdCM'
+
+
+bot = commands.Bot(command_prefix='*', description="Description")
+
+#hier onder alle commando's plaatsen
+
+#met deze commando kan ik controlleren of mijn bot werkt
+@bot.command()
+async def ping (ctx):
+    await ctx.send("I am online")
+
+@bot.command()
+async def hi(ctx):
+    await ctx.send("Hi, how are you?")
+
+#Deze functie staat in verbinding met een API
+def jokeAPI():
+    jokeLink = "https://official-joke-api.appspot.com/random_joke"
+    response = requests.request("GET", jokeLink)
+    jokeAPIresponse = str(json.loads(response.text)['setup'])+""+(json.loads(response.text)['punchline'])
+    return jokeAPIresponse
+
+#Deze functie haalt de mop op uit de api
+@bot.command(aliasses=['joke'])
+async def joke(ctx):
+    jokeAPIresponse = jokeAPI()
+    await ctx.send(jokeAPIresponse)
+
+#Hier worden parameters die je zelf doorgeeft ingevuld in een zin
+@bot.command()
+async def bottles(ctx, amount: typing.Optional[int] = 2000, *, liquid="beer"):
+    await ctx.send('{} bottles of {} on the floor!'.format(amount,liquid))
+
+
+@bot.command(name="kick", pass_context=True)
+@has_permissions(manage_roles=True, ban_members=True)
+async def _kick(ctx, member: Member):
+    await bot.kick(member)
+
+
+@bot.command(aliases=['user', 'info'])
+@commands.has_permissions(kick_members=True)
+async def whois(ctx, member : discord.Member):
+    embed = discord.Embed(title = member.name, description = member.menntion, color = discord.color.green)
+    embed.add_field(name = "ID", value = member.id, inline = True)
+    await ctx.send(embed=embed)
+
+@_kick.error
+async def kick_error(ctx, error):
+    if isinstance(error, MissingPermissions):
+        text = "Sorry{}, you do not have premissions to do that!".format(ctx.message.author)
+        await bot.send_message(ctx.message.channel, text)
+
+#Einde
+@bot.event 
+async def on_ready():
+    await bot.change_presence(activity=discord.Game (name="Stressen dit semester"))
+    print('Vul hier iets in')
+
+bot.run(token)
