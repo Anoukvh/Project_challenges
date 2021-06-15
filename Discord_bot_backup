@@ -13,11 +13,10 @@ from discord.ext.commands import has_permissions, MissingPermissions
 from urllib import parse, request
 import re
 
-from discord.ext.commands.help import HelpCommand
 
 intents = discord.Intents.default()
 intents.members = True
-Member = discord.member
+#Member = discord.member
 
 
 token = 'Enter token'
@@ -54,25 +53,33 @@ async def joke(ctx):
 async def bottles(ctx, amount: typing.Optional[int] = 2000, *, liquid="beer"):
     await ctx.send('{} bottles of {} on the floor!'.format(amount,liquid))
 
+@bot.event
+async def on_message(message):
+  if message.content.startswith('!hello'):  
+    embedVar = discord.Embed(title ="Title", description ="Desc", color =0x00ff00)
+    embedVar.add_field(name = "Field1", value = "Hi", inline =False )
+    await message.channel.send(embed=embedVar)
 
-@bot.command(name="kick", pass_context=True)
-@has_permissions(manage_roles=True, ban_members=True)
-async def _kick(ctx, member: Member):
-    await bot.kick(member)
+#@bot.command(aliases=['user', 'info'])
+#async def whois(ctx, member : Member = None):
+ #   embed = discord.Embed(title = member.name, description = member.mention, color = discord.color.green)
+  #  embed.add_field(name = "ID", value = member.id, inline = True)
+   # await ctx.send(embed=embed)
+
+#@bot.event
+#async def on_message(message):
+ # if message.content.startswith('!hello'):
+  #  embedVar = discord.Embed(title ="Tile", description ="Desc", color =0x00ff00)
+   # embedVar.add_field(name = "Field1", value = "Hi", inline =False )
+    #await message.channel.send(embed=embedVar)
 
 
-@bot.command(aliases=['user', 'info'])
-@commands.has_permissions(kick_members=True)
-async def whois(ctx, member : discord.Member):
-    embed = discord.Embed(title = member.name, description = member.menntion, color = discord.color.green)
-    embed.add_field(name = "ID", value = member.id, inline = True)
-    await ctx.send(embed=embed)
+#@bot.command(name="kick", pass_context=True)
+#@has_permissions(manage_roles=True, ban_members=True)
+#async def _kick(ctx, member = Member):
+ #   await bot.kick(member)
 
-@_kick.error
-async def kick_error(ctx, error):
-    if isinstance(error, MissingPermissions):
-        text = "Sorry{}, you do not have premissions to do that!".format(ctx.message.author)
-        await bot.send_message(ctx.message.channel, text)
+
 
 #Einde
 @bot.event 
