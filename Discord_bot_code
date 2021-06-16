@@ -2,7 +2,6 @@ import discord
 import json
 import requests
 import os
-import typing
 from discord import client
 from discord.ext import commands
 from discord import Intents
@@ -19,7 +18,7 @@ intents.members = True
 #Member = discord.member
 
 
-token = 'Enter token'
+token = 'ENTER YOUR TOKEN'
 
 
 bot = commands.Bot(command_prefix='*', description="Description")
@@ -66,19 +65,17 @@ async def on_message(message):
   #  embed.add_field(name = "ID", value = member.id, inline = True)
    # await ctx.send(embed=embed)
 
-#@bot.event
-#async def on_message(message):
- # if message.content.startswith('!hello'):
-  #  embedVar = discord.Embed(title ="Tile", description ="Desc", color =0x00ff00)
-   # embedVar.add_field(name = "Field1", value = "Hi", inline =False )
-    #await message.channel.send(embed=embedVar)
-
 
 #@bot.command(name="kick", pass_context=True)
 #@has_permissions(manage_roles=True, ban_members=True)
 #async def _kick(ctx, member = Member):
  #   await bot.kick(member)
 
+#@_kick.error
+#sync def kick_error(ctx, error):
+    #if isinstance(error, MissingPermissions):
+    #    text = "Sorry{}, you do not have premissions to do that!".format(ctx.message.author)
+     #   await bot.send_message(ctx.message.channel, text)
 
 
 #Einde
